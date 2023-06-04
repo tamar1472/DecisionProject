@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnosis </title>
+    <link rel="icon" type="image/x-icon" href="/static/Images/background.jpg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+
+    <script>
+        function filterSymptoms() {
+            var input, filter, ul, li, label, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toLowerCase();
+            ul = document.getElementById("symptom-list");
+            li = ul.getElementsByTagName("li");
+
+            for (i = 0; i < li.length; i++) {
+                label = li[i].getElementsByTagName("label")[0];
+                txtValue = label.textContent || label.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+</head>
+<body>
+
+<!--    <h1>Select Symptoms</h1>-->
+<!--    <input type="text" id="search" placeholder="Search symptoms" onkeyup="filterSymptoms()">-->
+<!--    <form>-->
+<!--        <ul id="symptom-list">-->
+<!--            {% for symptom in symptoms %}-->
+<!--            <li>-->
+<!--                <input type="checkbox" id="{{ symptom }}" name="symptoms" value="{{ symptom }}" class="symptom-checkbox">-->
+<!--                <label for="{{ symptom }}">{{ symptom }}</label>-->
+<!--            </li>-->
+<!--            {% endfor %}-->
+<!--        </ul>-->
+<!--        <br>-->
+<!--        <input type="submit" value="Submit">-->
+<!--    </form>-->
+
+    <h1>Symptom Selection</h1>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="search" class="Search symptoms" onkeyup="filterSymptoms()">
+        </div>
+        <form method="POST" action="/">
+            <ul id="symptom-list">
+                {% for symptom in symptoms %}
+                    <li>
+                        <input type="checkbox" id="{{ symptom }}" name="selected_symptoms" value="{{ symptom }}">
+                        <label for="{{ symptom }}" class="checkbox-label">{{ symptom }}</label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <input type="submit" value="Submit">
+        </form>
+
+</body>
+</html>
