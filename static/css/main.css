@@ -15,12 +15,12 @@ h1 {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-
 }
 
 .search-container {
     text-align: center;
     margin-bottom: 20px;
+
 }
 
 .search-input {
@@ -63,4 +63,36 @@ input[type="submit"] {
 select{
     font-size: 15px; /* Adjust the font size as needed */
     padding: 5px; /* Adjust the padding as needed */
+}
+
+/* Styles for the navigation bar */
+nav {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  padding: 20px;
+  border-radius: 30px;
+}
+
+/* Styles for the navigation links */
+nav a {
+  color: #333;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+/* Styles for the "Logout" link */
+nav .logout {
+  color: red;
+  margin-left: 20px;
+  margin-right: 0;
+}
+
+/* Hover effect for the navigation links */
+nav a:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }

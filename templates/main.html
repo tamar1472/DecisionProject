@@ -29,21 +29,24 @@
 
 </head>
 <body>
+<!-- navigate through pages -->
+<nav>
+    {% if 'role' in session and session['role'] == 'admin' %}
+        <a href="/admin">Admin Panel</a>
+        <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'regular user' %}
+        <a href="/symptoms">Symptoms</a>
 
-<!--    <h1>Select Symptoms</h1>-->
-<!--    <input type="text" id="search" placeholder="Search symptoms" onkeyup="filterSymptoms()">-->
-<!--    <form>-->
-<!--        <ul id="symptom-list">-->
-<!--            {% for symptom in symptoms %}-->
-<!--            <li>-->
-<!--                <input type="checkbox" id="{{ symptom }}" name="symptoms" value="{{ symptom }}" class="symptom-checkbox">-->
-<!--                <label for="{{ symptom }}">{{ symptom }}</label>-->
-<!--            </li>-->
-<!--            {% endfor %}-->
-<!--        </ul>-->
-<!--        <br>-->
-<!--        <input type="submit" value="Submit">-->
-<!--    </form>-->
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'research student' %}
+        <a href="/RS_panel">Research Student Panel</a>
+        <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'username' in session %}
+        <a href="/" class="logout">Logout</a>
+    {% endif %}
+</nav>
 
     <h1>Symptom Selection</h1>
     <div class="container">
@@ -61,6 +64,6 @@
             </ul>
             <input type="submit" value="Submit">
         </form>
-
+    </div>
 </body>
 </html>

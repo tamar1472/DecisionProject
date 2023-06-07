@@ -38,8 +38,7 @@ class RandomForestSupportModel:
         # return accuracy
         y_pred = self.clf.predict(X_test)
         accuracy = metrics.accuracy_score(y_test, y_pred)
-        return accuracy
-
+        return accuracy,feature_imp
 
 
     def make_prediction(self, df):
@@ -48,6 +47,7 @@ class RandomForestSupportModel:
         prediction = self.clf.predict(df)[0]
         probability = self.clf.predict_proba(df).max(axis=1)[0]
         return prediction, probability
+
 
     def save(self, filename):
         with open(filename, "wb") as file:
@@ -59,6 +59,9 @@ class RandomForestSupportModel:
             return pickle.load(file)
 
 
+
+
+
 if __name__ == '__main__':
     train_file = 'Datasets/Training.csv'
     test_file = 'Datasets/Testing.csv'
@@ -68,6 +71,4 @@ if __name__ == '__main__':
     print("Accuracy:", model.train_model())
 
     # model.save("model.pkl")
-
-
 
