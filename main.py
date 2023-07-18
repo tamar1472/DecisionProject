@@ -28,7 +28,7 @@ try:
         cursor.execute("select database();")
         record = cursor.fetchone()
         print("You're connected to database: ", record)
-        # app.logger.error("ADMIN Connected to MySQL Server")
+
         # cursor.close()
         # connection.close()
         # print("MySQL connection is closed")
@@ -73,17 +73,17 @@ def login():
             # app.logger.error("ADMIN Connected")
             return redirect(url_for('admin'))
 
-        if result[0] == 'regular user':
+        if result[0] == 'patient':
             session["username"] = username
-            session["role"] = "regular user"
+            session["role"] = "user"
             # app.logger.error("REGULAR USER Connected")
             return redirect(url_for('home'))
 
-        if result[0] == 'research student':
+        if result[0] == 'doctor':
             session["username"] = username
-            session["role"] = "research student"
+            session["role"] = "doctor"
             # app.logger.error("RESEARCH STUDENT Connected")
-            return redirect(url_for('rs_panel'))
+            return redirect(url_for('doctor'))
 
     return render_template('login.html')
 
@@ -92,90 +92,153 @@ def login():
 def admin():
     if session["role"] != 'admin':
         return redirect(url_for('login'))
-    try:
-        accuracy, feature_imp = model.train_model()
 
-        # Convert feature_imp to a DataFrame
-        feature_imp_df = pd.DataFrame({'Feature': feature_imp})
+    try:
+        feature_imp = model.clf.feature_importances_
+        feature_name = model.clf.feature_names_in_
+        sorted_list = sorted(list(zip(feature_imp, feature_name)), key=lambda x: x[0], reverse=True)
+        sorted_feature_imp = [item[0] for item in sorted_list]
+        sorted_feature_name = [item[1] for item in sorted_list]
+        feature_imp_df = pd.Series(sorted_feature_imp,index=sorted_feature_name)
 
         # Generate the graph
         image_base64 = generate_graph(feature_imp_df)
 
-        return render_template('adminPanel.html', image_base64=image_base64)
+        users = db_operations.users()
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            role = request.form['role']
+
+            if role == 'admin':
+                # Add the user to the 'users' table with role='admin'
+                db_operations.add_user(username, password, role)
+
+            elif role == 'doctor':
+                # Add the doctor to the 'doctors' table
+                full_name = request.form['full_name']
+                db_operations.add_doctor(username, password, full_name)
+
+                # Add the doctor to the 'users' table with role='doctor'
+                db_operations.add_user(username, password, role)
+
+            elif role == 'patient':
+                # Add the patient to the 'patients' table
+                full_name = request.form['full_name']
+                gender = request.form['gender']
+                contact_number = request.form['contact_number']
+                doctor_id = request.form['doctor_id']
+                db_operations.add_patient(username, password, full_name, gender, contact_number, doctor_id)
+
+                # Add the patient to the 'users' table with role='patient'
+                db_operations.add_user(username, password, role)
+
+            return redirect(url_for('admin'))
+
+        return render_template('admin.html', image_base64=image_base64, users = users)
+
     except Exception as e:
         return "Error while loading model: " + str(e)
 
 
 
-@app.route('/RS_panel', methods=["POST", "GET"])
-def rs_panel():
-    if session["role"] != 'research student':
+@app.route('/doctor', methods=["POST", "GET"])
+def doctor():
+    if session["role"] != 'doctor':
         return redirect(url_for('login'))
+    # Get the doctor's ID based on their username
 
-    return render_template('RS_panel.html')
+    doctor_id = db_operations.get_doctor_id(session["username"])
+    assigned_patients = db_operations.get_assigned_patients(doctor_id)
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        full_name = request.form['full_name']
+        gender = request.form['gender']
+        contact_number = request.form['contact_number']
+        # Add the patient to the 'patients' table
+        patient_id = db_operations.add_patient(username, password, full_name, gender, contact_number, doctor_id)
+
+        if patient_id is not None:
+            # Add the patient to the 'users' table with role='patient'
+            db_operations.add_user(username, password, 'patient')
+
+
+        return redirect(url_for('doctor'))
+
+    print(assigned_patients)
+    return render_template('doctor.html',assigned_patients = assigned_patients)
+
+
 
 
 @app.route('/symptoms', methods=["POST", "GET"])
 def home():
     new_line = model.line.copy()
     new_line.columns = new_line.columns.astype(str)
-    # symptoms_with_underscore = [symptom.lower().replace(' ', '_') for symptom in symptoms]
-    # print(new_line)
 
     if request.method == 'POST':
         selected_symptoms = request.form.getlist('selected_symptoms')
         for symptom in selected_symptoms:
             index = symptoms.index(symptom)
             new_line.iloc[0][index] = 1
-        # print(new_line)
         prediction = model.make_prediction(new_line)
 
-        # print(model.line.columns)
+        # Retrieve the logged-in patient's information
+        patient_id = db_operations.get_patient_id(session["username"])
 
-        print(prediction)
-        return render_template('main.html', symptoms=symptoms)
+        # Store the prediction and accuracy in the patient_predictions table
+        query = "INSERT INTO patient_predictions (patient_id, symptoms, disease, accuracy) VALUES (%s, %s, %s, %s)"
+        symptoms_str = ", ".join(selected_symptoms)
+        prediction_disease = prediction[0]  # Extract the disease name
+        prediction_accuracy = prediction[1]  # Extract the accuracy value
+        values = (patient_id, symptoms_str, prediction_disease, prediction_accuracy)
+        converted_values = tuple(str(value) for value in values)  # Convert values to strings
+        cursor.execute(query, converted_values)
+        connection.commit()
 
-    else:
-        return render_template('main.html',symptoms=symptoms)
+
+        return render_template('main.html', symptoms=symptoms, prediction=prediction)
+
+    return render_template('main.html',symptoms=symptoms)
 
 
-def generate_graph(feature_imp_df):
+def generate_graph(feature_imp):
     # Adjust the figure size and margins
     plt.figure(figsize=(12, 9))
     plt.subplots_adjust(left=0.25, right=0.75, top=0.9, bottom=0.1)
-
     # Generate the graph
     sns.set_style("whitegrid")
-    ax = sns.barplot(x=feature_imp_df.index, y=feature_imp_df['Feature'], data=feature_imp_df, palette='Blues_d')
+    ax = sns.barplot(x=feature_imp, y=feature_imp.index, palette='Blues_d')
     ax.set_xlabel('Feature Importance Score', fontsize=14)
     ax.set_ylabel('Features', fontsize=14)
     ax.set_title("Visualizing Important Features", fontsize=16)
-
-    # Adjust the background transparency
+    # Adjust the background transparency 
     ax.patch.set_alpha(0.7)
     ax.figure.patch.set_alpha(0.0)
-
     # Save the graph to a BytesIO object
     buffer = BytesIO()
     plt.savefig(buffer, format='png', transparent=True, bbox_inches='tight')
     buffer.seek(0)
-
     # Encode the graph image as base64
     image_base64 = base64.b64encode(buffer.getvalue()).decode()
 
     return image_base64
 
+
+
+
+# def add_patient():
+#     return
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
 # def scatter():
 #     try:
-#         # Load the saved model
-#         model = RandomForestSupportModel.load("model.pkl")
-#
-#         # Load the data for scatter plot
-#         data = pd.read_csv("scatter_data.csv")
-#
-#         # Make predictions on the data
-#         data['prediction'] = model.predict(data.drop('category', axis=1))
-#
 #         # Generate the scatter plot
 #         plt.figure(figsize=(10, 8))
 #         sns.scatterplot(x=data['x'], y=data['y'], hue=data['prediction'], palette='Set1')
@@ -190,13 +253,7 @@ def generate_graph(feature_imp_df):
 #
 #         # Encode the plot image as base64
 #         scatter_image_base64 = base64.b64encode(buffer.getvalue()).decode()
-#         return render_template('adminPanel.html', scatter_image_base64=scatter_image_base64)
+#         return render_template('admin.html', scatter_image_base64=scatter_image_base64)
 #     except Exception as e:
 #         return "Error while generating scatter plot: " + str(e)
-#
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
+# #

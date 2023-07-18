@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/css/panels.js"></script>
+
+
+</head>
+<body>
+<!-- navigate through pages -->
+<nav>
+    {% if 'role' in session and session['role'] == 'admin' %}
+    <a href="/admin">Admin Panel</a>
+    <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'user' %}
+    <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'doctor' %}
+    <a href="/doctor">Doctor</a>
+    <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'username' in session %}
+    <a href="/" class="logout">Logout</a>
+    {% endif %}
+</nav>
+
+<div class="container">
+    <div>
+        <h1 class='logo'>Admin Panel</h1>
+        <div class="graph">
+            <!-- Add an image tag to display the graph -->
+            <img src="data:image/png;base64,{{ image_base64 }}" alt="Graph">
+        </div>
+    </div>
+    <div class="user-section">
+        <div class="table">
+            <h2>Users</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>User Name</th>
+                    <th>Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                    <td>{{ user[2] }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+         <button id="add-user-btn" class="floating-button green-button" >Add New User</button>
+
+        <div id="user-form" class="user-form">
+              <div class="modal-content">
+                <span id="close-form-btn" class="close-button">&times;</span>
+                <form method="POST" action="{{ url_for('admin') }}">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <br>
+                    <label for="role">Role:</label>
+                    <select id="role" name="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="patient">Patient</option>
+                        <option value="doctor">Doctor</option>
+                    </select>
+                    <br>
+                    <div id="additional-fields" style="display: none;">
+                        <label for="full_name">Full Name:</label>
+                        <input type="text" id="full_name" name="full_name">
+                        <br>
+                        <label for="gender">Gender:</label>
+                        <select id="gender" name="gender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <br>
+                        <label for="contact_number">Contact number:</label>
+                        <input type="text" id="contact_number" name="contact_number">
+                        <br>
+                        <label for="doctor_id">Assigned Doctors ID:</label>
+                        <input type="number" id="doctor_id" name="doctor_id">
+                    </div>
+                    <div id="doctor-fields" style="display: none;">
+                        <label for="doctor_full_name">Doctor Full Name:</label>
+                        <input type="text" id="doctor_full_name" name="doctor_full_name">
+                    </div>
+                    <button type="submit">Add User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

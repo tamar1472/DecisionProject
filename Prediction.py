@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import pickle
 
+
 class RandomForestSupportModel:
     def __init__(self, train_file, test_file):
         train = pd.read_csv(train_file)
@@ -11,7 +12,6 @@ class RandomForestSupportModel:
         self.data = pd.concat([train, test])
         self.line = None  # input to predict
         self.clf = None
-
 
     def train_model(self):
         # over fitting
@@ -38,8 +38,7 @@ class RandomForestSupportModel:
         # return accuracy
         y_pred = self.clf.predict(X_test)
         accuracy = metrics.accuracy_score(y_test, y_pred)
-        return accuracy,feature_imp
-
+        return accuracy
 
     def make_prediction(self, df):
         # df.columns = df.columns.astype(str)
@@ -47,7 +46,6 @@ class RandomForestSupportModel:
         prediction = self.clf.predict(df)[0]
         probability = self.clf.predict_proba(df).max(axis=1)[0]
         return prediction, probability
-
 
     def save(self, filename):
         with open(filename, "wb") as file:
@@ -59,9 +57,6 @@ class RandomForestSupportModel:
             return pickle.load(file)
 
 
-
-
-
 if __name__ == '__main__':
     train_file = 'Datasets/Training.csv'
     test_file = 'Datasets/Testing.csv'
@@ -71,4 +66,3 @@ if __name__ == '__main__':
     print("Accuracy:", model.train_model())
 
     # model.save("model.pkl")
-

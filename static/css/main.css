@@ -1,34 +1,53 @@
-body{
+body {
     background-image: url("/static/Images/background.jpg");
-    height: 800px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+
 }
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 h1 {
     text-align: center;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    margin-top: 0;
+    font-size: 20px;
 }
 
 .search-container {
-    text-align: center;
-    margin-bottom: 20px;
-
+    text-align: left;
+    margin-bottom: 0;
 }
 
-.search-input {
+.input-search {
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 300px;
+    border-radius: 25px;
+    width: 400px;
     font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-search::placeholder {
+    color: #999;
+}
+
+.input-search:focus {
+    border-color: #084cf8;
 }
 
 ul {
@@ -36,6 +55,7 @@ ul {
     padding: 0;
     display: flex;
     flex-wrap: wrap;
+    margin: 0;
 }
 
 li {
@@ -47,52 +67,110 @@ li {
     display: inline-block;
     vertical-align: middle;
     margin-left: 5px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid #084cf8;
+    outline: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #03de20;
+}
+
+input[type="checkbox"]:checked + .checkbox-label {
+    color: #000000;
+    font-weight: bold;
 }
 
 input[type="submit"] {
     display: block;
     margin: 0 auto;
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 25px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-select{
-    font-size: 15px; /* Adjust the font size as needed */
-    padding: 5px; /* Adjust the padding as needed */
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+
+h2 {
+    text-align: right;
+    font-size: 35px;
+    position: relative;
+    left: 600px;
+    bottom: 600px;
+}
+
+
+.prediction-box {
+    padding: 20px;
+    border-radius: 10px;
+    text-align: right;
+    position: relative;
+    left: 600px;
+    bottom: 600px;
+}
+
+
+.prediction-box p {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.prediction-box p {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
 }
 
 /* Styles for the navigation bar */
 nav {
-  display: flex;
-  justify-content: center;
-  background-color: transparent;
-  padding: 20px;
-  border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    padding: 20px;
+    border-radius: 30px;
+    font-size: 20px;
+
 }
 
 /* Styles for the navigation links */
 nav a {
-  color: #333;
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+    color: #333;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 /* Styles for the "Logout" link */
 nav .logout {
-  color: red;
-  margin-left: 20px;
-  margin-right: 0;
+    color: red;
+    margin-left: 20px;
+    margin-right: 0;
 }
 
 /* Hover effect for the navigation links */
 nav a:hover {
-  background-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel </title>
+    <link rel="icon" type="image/x-icon" href="/static/Images/background.jpg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/doctor.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/css/panels.js"></script>
+</head>
+<body>
+<!-- navigate through pages -->
+<nav>
+    {% if 'role' in session and session['role'] == 'admin' %}
+    <a href="/admin">Admin Panel</a>
+    <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'user' %}
+    <a href="/symptoms">Symptoms</a>
+
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'doctor' %}
+    <a href="/doctor">Doctor Panel</a>
+    <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'username' in session %}
+    <a href="/" class="logout">Logout</a>
+    {% endif %}
+</nav>
+
+<h1>Doctor Panel</h1>
+<div>
+    <h2>Assigned Patients</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Patient ID</th>
+            <th>Full Name</th>
+            <th>Gender</th>
+            <th>Contact Number</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patient in assigned_patients %}
+        <tr>
+            <td>{{ patient[0] }}</td>
+            <td>{{ patient[3] }}</td>
+            <td>{{ patient[4] }}</td>
+            <td>{{ patient[5] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2>
+        <span id="toggle-form" class="plus-icon">Add New Patient</span>
+    </h2>
+    <form id="patient-form" method="POST" action="{{ url_for('doctor') }}" style="display: none;">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <label for="full_name">Full Name:</label>
+        <input type="text" id="full_name" name="full_name" required>
+        <br>
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <br>
+        <label for="contact_number">Contact Number:</label>
+        <input type="text" id="contact_number" name="contact_number" required>
+        <br>
+        <button type="submit">Add Patient</button>
+    </form>
+</div>
+
+
+</body>
+</html>

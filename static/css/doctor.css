@@ -1,0 +1,111 @@
+
+body {
+    background-image: url("/static/Images/background.jpg");
+    height: 800px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 15px;
+}
+
+/* Styles for the navigation bar */
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    padding: 20px;
+    border-radius: 30px;
+    font-size: 20px;
+}
+
+/* Styles for the navigation links */
+nav a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+/* Styles for the "Logout" link */
+nav .logout {
+    color: red;
+    margin-left: 20px;
+    margin-right: 0;
+}
+
+/* Hover effect for the navigation links */
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+h2 {
+    text-align: center;
+}
+
+.plus-icon {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.plus-icon:hover {
+    color: blue;
+}
+
+#patient-form {
+    display: none;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Form fields */
+#patient-form input[type="text"],
+#patient-form input[type="password"],
+#patient-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Submit button */
+#patient-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#patient-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
