@@ -1,0 +1,69 @@
+body {
+    background-image: url("/static/Images/background.jpg");
+    background-position: center;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    color: #333;
+}
+
+/* Styles for the diagnosis table */
+.diagnosis-table {
+    width: 80%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Styles for the table header */
+.diagnosis-table thead {
+    background-color: #f2f2f2;
+}
+
+/* Style for the table header cells (th) */
+.diagnosis-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Style for the table body cells (td) */
+.diagnosis-table td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Add some spacing and style to the rows */
+.diagnosis-table tbody tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.3s ease;
+}
+
+/* Center align text in the accuracy column */
+.diagnosis-table td:nth-child(3) {
+    text-align: center;
+}
+
+/* Make the "No diagnosis history available" message centered */
+.diagnosis-table p {
+    text-align: center;
+    margin-top: 30px;
+    font-weight: bold;
+    color: #777;
+}
+
+/* Add some margin to the table when there's no diagnosis history available */
+.diagnosis-table:not(:empty) {
+    margin-bottom: 30px;
+}

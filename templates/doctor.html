@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel </title>
+    <title>Doctor Panel </title>
     <link rel="icon" type="image/x-icon" href="/static/Images/background.jpg">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/doctor.css') }}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
     <script src="../static/css/panels.js"></script>
 </head>
 <body>
@@ -15,13 +15,12 @@
     <a href="/admin">Admin Panel</a>
     <a href="/symptoms">Symptoms</a>
     {% endif %}
-    {% if 'role' in session and session['role'] == 'user' %}
+    {% if 'role' in session and session['role'] == 'patient' %}
+    <a href="/patient">Patient Panel</a>
     <a href="/symptoms">Symptoms</a>
-
     {% endif %}
     {% if 'role' in session and session['role'] == 'doctor' %}
     <a href="/doctor">Doctor Panel</a>
-    <a href="/symptoms">Symptoms</a>
     {% endif %}
     {% if 'username' in session %}
     <a href="/" class="logout">Logout</a>
@@ -47,39 +46,72 @@
             <td>{{ patient[3] }}</td>
             <td>{{ patient[4] }}</td>
             <td>{{ patient[5] }}</td>
+
+            <td>
+                <a class="button" href="{{ url_for('diagnose_patient', patient_id=patient[0]) }}">Diagnose</a>
+            </td>
+            <td>
+                <a class="button" href="{{ url_for('view_diagnosis_history', patient_id=patient[0]) }}">View History</a>
+            </td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
 
-<div>
-    <h2>
-        <span id="toggle-form" class="plus-icon">Add New Patient</span>
-    </h2>
-    <form id="patient-form" method="POST" action="{{ url_for('doctor') }}" style="display: none;">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <label for="full_name">Full Name:</label>
-        <input type="text" id="full_name" name="full_name" required>
-        <br>
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender" required>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>
-        <br>
-        <label for="contact_number">Contact Number:</label>
-        <input type="text" id="contact_number" name="contact_number" required>
-        <br>
-        <button type="submit">Add Patient</button>
-    </form>
+
+<button id="add-patient" class="floating-button green-button">Add New Patient</button>
+<div id="patient-form" class="patient-form" style="display: none;">
+    <div class="modal-content">
+        <span id="close-form" class="close-button">&times;</span>
+        <form method="POST" action="{{ url_for('doctor') }}">
+            <h2>Add New Patient</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" required>
+            <br>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <br>
+            <label for="contact_number">Contact Number:</label>
+            <input type="text" id="contact_number" name="contact_number" required>
+            <br>
+            <button type="submit">Add Patient</button>
+        </form>
+    </div>
 </div>
+<!-- Custom popup message -->
+<div id="popup-message" class="popup-message">
+    <div class="message-content">
+        User has been added successfully!
+    </div>
+</div>
+
+<script>
+    // Show patient form when clicking the "Add New Patient" button
+    document.getElementById("add-patient").addEventListener("click", function () {
+        document.getElementById("patient-form").style.display = "block";
+        document.body.style.overflow = "hidden"; // Prevent scrolling on the background content
+    });
+
+    // Hide patient form and reset fields
+    document.getElementById("close-form").addEventListener("click", function () {
+        document.getElementById("patient-form").style.display = "none";
+        document.getElementById("patient-form")[0].reset();
+        document.body.style.overflow = "auto"; // Enable scrolling on the background content
+    });
+</script>
+
+
 
 
 </body>

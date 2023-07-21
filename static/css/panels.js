@@ -1,9 +1,9 @@
-$(document).ready(function () {
-    $("#toggle-form").click(function () {
-
-        $("#patient-form").slideToggle();
-    });
-});
+// $(document).ready(function () {
+//     $("#toggle-form").click(function () {
+//
+//         $("#patient-form").slideToggle();
+//     });
+// });
 
 $(document).ready(function () {
     $("#add-user-btn").click(function () {
@@ -12,7 +12,7 @@ $(document).ready(function () {
 
     $("#close-form-btn").click(function () {
         $("#user-form").fadeOut();
-        $("#user-form")[0].reset();
+        $("#user-form form")[0].reset();
         $("#additional-fields").slideUp();
         $("#doctor-fields").slideUp();
     });
@@ -50,5 +50,31 @@ function filterSymptoms() {
     }
 }
 
+function validateForm() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    var checked = false;
+
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            checked = true;
+            break;
+        }
+    }
+
+    if (!checked) {
+        alert("Please select at least one symptom.");
+        return false; // Prevent the form from submitting
+    }
+
+    // Retrieve the patient ID from the hidden input field
+    var patientIdInput = document.querySelector('input[name="patient_id"]');
+    var patientId = patientIdInput.value;
+
+    // Add the patient ID to the form submission URL
+    var form = document.querySelector('form');
+    form.action = "/symptoms/" + patientId;
+
+    return true; // Allow the form to submit
+}
 
 

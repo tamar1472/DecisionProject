@@ -16,17 +16,31 @@
     <a href="/admin">Admin Panel</a>
     <a href="/symptoms">Symptoms</a>
     {% endif %}
-    {% if 'role' in session and session['role'] == 'user' %}
+    {% if 'role' in session and session['role'] == 'patient' %}
+    <a href="/patient">Patient Panel</a>
     <a href="/symptoms">Symptoms</a>
     {% endif %}
     {% if 'role' in session and session['role'] == 'doctor' %}
-    <a href="/doctor">Doctor</a>
-    <a href="/symptoms">Symptoms</a>
+    <a href="/doctor">Doctor Panel</a>
     {% endif %}
     {% if 'username' in session %}
     <a href="/" class="logout">Logout</a>
     {% endif %}
 </nav>
+
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-message {% if show_flash %}show{% endif %}">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endwith %}
+
 
 <div class="container">
     <div>

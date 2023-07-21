@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Panel</title>
+    <link rel="icon" type="image/x-icon" href="/static/Images/background.jpg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/patient.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/css/panels.js"></script>
+</head>
+<body>
+<!-- navigate through pages -->
+<nav>
+    {% if 'role' in session and session['role'] == 'admin' %}
+    <a href="/admin">Admin Panel</a>
+    <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'patient' %}
+    <a href="/patient">Patient Panel</a>
+    <a href="/symptoms">Symptoms</a>
+    {% endif %}
+    {% if 'role' in session and session['role'] == 'doctor' %}
+    <a href="/doctor">Doctor Panel</a>
+    {% endif %}
+    {% if 'username' in session %}
+    <a href="/" class="logout">Logout</a>
+    {% endif %}
+</nav>
+
+<div class="container">
+    <h1>Patient Panel</h1>
+    <div class="assigned-doctor">
+        <h2>Assigned Doctor:</h2>
+        {% if assigned_doctor %}
+        <p>{{ assigned_doctor[0] }}</p>
+        {% else %}
+        <p>No doctor assigned yet.</p>
+        {% endif %}
+    </div>
+    <h2>Diagnosis History</h2>
+    {% if diagnosis_history %}
+    <table>
+        <thead>
+        <tr>
+            <th>Symptoms</th>
+            <th>Disease</th>
+            <th>Accuracy</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for diagnosis in diagnosis_history %}
+        <tr>
+            <td>{{ diagnosis[0] }}</td>
+            <td>{{ diagnosis[1] }}</td>
+            <td>{{ diagnosis[2] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No diagnosis history available.</p>
+    {% endif %}
+</div>
+</body>
+</html>

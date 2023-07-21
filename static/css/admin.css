@@ -178,4 +178,27 @@ tbody tr:nth-child(even) {
     font-size: 14px;
 }
 
+.flash-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    z-index: 999;
+}
+
+.flash-message.show {
+    display: block;
+    animation: fadeOut 5s forwards; /* The message will disappear after 3 seconds */
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+
+
 

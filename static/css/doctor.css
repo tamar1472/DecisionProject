@@ -7,7 +7,22 @@ body {
     background-size: cover;
     font-size: 15px;
 }
+thead {
+  background-color: #f2f2f2;
+}
 
+/* Style for the table header cells (th) */
+th {
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Style for the table body cells (td) */
+td {
+  padding: 12px;
+  text-align: left;
+}
 /* Styles for the navigation bar */
 nav {
     display: flex;
@@ -46,15 +61,15 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
+/*th, td {*/
+/*    padding: 10px;*/
+/*    text-align: left;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*}*/
 
-th {
-    background-color: #f2f2f2;
-}
+/*th {*/
+/*    background-color: #f2f2f2;*/
+/*}*/
 
 tr:hover {
     background-color: #f5f5f5;
@@ -73,39 +88,143 @@ h2 {
     color: blue;
 }
 
-#patient-form {
-    display: none;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+a.button {
+    display: inline-block;
+    padding: 8px 8px;
+    background-color: #219ce7; /* A light blue color */
+    color: white;
+    text-decoration: none;
     border-radius: 5px;
-    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Form fields */
-#patient-form input[type="text"],
-#patient-form input[type="password"],
-#patient-form select {
+/* Hover effect for the buttons */
+a.button:hover {
+    background-color: #1aa3ff; /* A slightly darker shade of blue when hovered */
+}
+
+/* Align buttons in the center of the cells */
+td a.button {
+    display: block;
+    text-align: center;
+}
+
+/* Give some spacing between the buttons */
+td a.button + a.button {
+    margin-top: 5px;
+}
+
+.patient-form h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.patient-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.patient-form input[type="text"],
+.patient-form input[type="password"],
+.patient-form select {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 8px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 14px;
 }
 
-/* Submit button */
-#patient-form input[type="submit"] {
+
+.patient-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the modal content */
+.patient-form .modal-content {
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Style the close button */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+/* Style the floating button */
+.floating-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
     background-color: #4CAF50;
     color: white;
-    padding: 8px 16px;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-#patient-form input[type="submit"]:hover {
-    background-color: #45a049;
+button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    margin: 10px auto 0;
+    display: block;
+}
+
+.green-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.popup-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+}
+
+.message-content {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px; /* Increase font size */
 }

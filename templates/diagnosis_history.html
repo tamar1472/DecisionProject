@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnosis History</title>
+    <link rel="icon" type="image/x-icon" href="/static/Images/background.jpg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/diagnosis_history.css') }}">
+</head>
+<body>
+    <h1>Diagnosis History</h1>
+    {% if diagnosis_history %}
+    <table class="diagnosis-table">
+        <thead>
+            <tr>
+                <th>Symptoms</th>
+                <th>Disease</th>
+                <th>Accuracy</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for diagnosis in diagnosis_history %}
+            <tr>
+                <td>{{ diagnosis[0] }}</td>
+                <td>{{ diagnosis[1] }}</td>
+                <td>{{ diagnosis[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No diagnosis history available.</p>
+    {% endif %}
+</body>
+</html>

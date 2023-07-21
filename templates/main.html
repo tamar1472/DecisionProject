@@ -14,13 +14,12 @@
     <a href="/admin">Admin Panel</a>
     <a href="/symptoms">Symptoms</a>
     {% endif %}
-    {% if 'role' in session and session['role'] == 'user' %}
+    {% if 'role' in session and session['role'] == 'patient' %}
+    <a href="/patient">Patient Panel</a>
     <a href="/symptoms">Symptoms</a>
-
     {% endif %}
     {% if 'role' in session and session['role'] == 'doctor' %}
     <a href="/doctor">Doctor</a>
-    <a href="/symptoms">Symptoms</a>
     {% endif %}
     {% if 'username' in session %}
     <a href="/" class="logout">Logout</a>
@@ -32,7 +31,7 @@
     <input type="text" id="search" class="input-search" onkeyup="filterSymptoms()" placeholder="Type to Search...">
 </div>
 <div class="form-container">
-    <form method="POST" action="/symptoms">
+    <form method="POST" onsubmit="return validateForm()">
         <ul id="symptom-list">
             {% for symptom in symptoms %}
             <li>
@@ -41,6 +40,7 @@
             </li>
             {% endfor %}
         </ul>
+
         <input type="submit" value="Submit">
     </form>
 </div>
@@ -48,7 +48,7 @@
 <h2>Prediction:</h2>
 <div class="prediction-box">
     {% if prediction %}
-    <p id="prediction"> Prediction: {{ prediction[0] }}</p>
+    <p id="prediction"> Diagnosis: {{ prediction[0] }}</p>
     <p id="accuracy">Accuracy: {{ prediction[1] }}</p>
     {% else %}
     <p></p>
