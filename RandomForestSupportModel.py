@@ -4,7 +4,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import pickle
 
-
 class RandomForestSupportModel:
     def __init__(self, train_file, test_file):
         train = pd.read_csv(train_file)

@@ -2,6 +2,7 @@ import logging
 import mysql.connector
 from datetime import datetime
 
+
 # Disable Werkzeug logs in the console
 werkzeug_logger = logging.getLogger('werkzeug')
 werkzeug_logger.propagate = False
@@ -31,9 +32,11 @@ def login(username, password):
     result = cursor.fetchall()
     if result is None:
         return "Invalid credentials"
+    elif len(result) == 0:
+        return "user does not exist"
     else:
         role = result[0]
-    return role
+        return role
 
 
 def users():
@@ -130,6 +133,7 @@ def add_patient(username, password, full_name, gender, contact_number, doctor_id
         print("Error while adding patient:", e)
         return None
 
+
 def add_user(username, password, role):
     query = "INSERT INTO users (username, password, role) VALUES (%s, %s, %s)"
     values = (username, password, role)
@@ -166,6 +170,7 @@ def get_diagnosis_history(patient_id):
         return diagnosis_history
 
     return None  # Return None if no diagnosis history is found for the patient
+
 
 def doctor_exists(doctor_id):
     query = "SELECT * FROM doctors WHERE id = %s"

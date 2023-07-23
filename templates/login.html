@@ -8,6 +8,20 @@
 </head>
 <body>
 
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-message {% if show_flash %}show{% endif %}">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endwith %}
+
+
+
 <div class="container">
   <div class="top"></div>
   <div class="bottom"></div>
@@ -20,8 +34,6 @@
         <input type="password" id="password" name="password"><br>
         <input type="submit" value="Login">
     </form>
-
-
   </div>
 </div>
 

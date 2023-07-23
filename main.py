@@ -1,4 +1,3 @@
-import os
 from flask import Flask, render_template, request, url_for, redirect, session, flash
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -8,7 +7,6 @@ import pandas as pd
 import db_operations
 from db_operations import db_logger
 from RandomForestSupportModel import RandomForestSupportModel
-import logging
 import mysql.connector
 from mysql.connector import Error
 
@@ -16,6 +14,7 @@ app = Flask(__name__)
 app.secret_key = 'mysecretkey'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+model_path = "C:\\Users\\תמר\\PycharmProjects\\DecisionProject\\model.pkl"
 
 try:
     connection = mysql.connector.connect(user='tamar', password='123456', host='127.0.0.1', port=3306,
@@ -37,9 +36,11 @@ except Error as e:
     db_logger.error("Error while connecting to MySQL: %s", e)
 
 try:
-    model = RandomForestSupportModel.load("model.pkl")
+    model = RandomForestSupportModel.load(model_path)
 except Error as e:
     print("Error while loading model", e)
+except AttributeError:
+    pass
 
 symptoms = ['Itching', 'Muscle pain', 'Dark urine', 'Mild fever', 'Abdominal pain',
             'Unsteadiness', 'Yellowing of eyes', 'Altered sensorium',
@@ -85,11 +86,9 @@ def login():
             return redirect(url_for('doctor'))
 
     return render_template('login.html')
-
-
 @app.route('/admin', methods=["POST", "GET"])
 def admin():
-    if session["role"] != 'admin':
+    if session.get("role") != 'admin':
         return redirect(url_for('login'))
     try:
         feature_imp = model.clf.feature_importances_
@@ -139,7 +138,6 @@ def admin():
                 else:
                     flash("Doctor with the specified ID does not exist. Please choose another doctor.")
                     return render_template('admin.html', image_base64=image_base64, users=users, show_flash=True)
-
 
             return redirect(url_for('admin'))
 
@@ -196,7 +194,6 @@ def patient_panel():
 
 @app.route('/symptoms', methods=["GET", "POST"])
 def diagnose_patient():
-    print("Diagnose Patient Function Called")
     if 'role' not in session:
         return redirect(url_for('login'))
 
@@ -205,7 +202,6 @@ def diagnose_patient():
     if session["role"] == 'doctor' and request.method == 'POST':
         # If the user is a doctor, check the patient_id provided in the form submission
         patient_id = request.args.get('patient_id', type=int)
-
         if patient_id is None:
             # If patient_id is not provided, redirect to the doctor's panel or display an error message
             db_logger.warning("No patient_id provided in form submission for doctor.")
